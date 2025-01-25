@@ -1,0 +1,38 @@
+[
+  {
+    "id": 1,
+    "name": "Account",
+    "description": "Account related information and settings.",
+    "icon": "account"
+  },
+  {
+    "id": 2,
+    "name": "Income",
+    "description": "Record and track your income sources.",
+    "icon": "income"
+  },
+  {
+    "id": 3,
+    "name": "Expense",
+    "description": "Manage your expenses and keep track of your spending.",
+    "icon": "expense"
+  },
+  {
+    "id": 4,
+    "name": "Transfer",
+    "description": "Transfer funds between accounts or external sources.",
+    "icon": "transfer"
+  },
+  {
+    "id": 5,
+    "name": "Subscription",
+    "description": "Manage your active subscriptions and renewals.",
+    "icon": "subscription"
+  },
+  {
+    "id": 6,
+    "name": "Goals",
+    "description": "Set and track your financial goals.",
+    "icon": "goals"
+  }
+]

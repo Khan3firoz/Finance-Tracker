@@ -1,0 +1,20 @@
+[
+  {
+    "id": 1,
+    "name": "Income",
+    "amount": 5000,
+    "icon": "income"
+  },
+  {
+    "id": 2,
+    "name": "Expense",
+    "amount": 2000,
+    "icon": "expense"
+  },
+  {
+    "id": 3,
+    "name": "Balance",
+    "amount": 3000,
+    "icon": "wallet"
+  }
+]
