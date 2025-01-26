@@ -6,7 +6,7 @@ import { Bank, Bell, Moon, Sun, User } from "@phosphor-icons/react/dist/ssr";
 import * as Avatar from '@radix-ui/react-avatar';
 
 const Header = () => {
-    const [theme, setTheme] = useState('light');
+    const [theme, setTheme] = useState('dark');
 
     // Sync theme with localStorage
     useEffect(() => {
