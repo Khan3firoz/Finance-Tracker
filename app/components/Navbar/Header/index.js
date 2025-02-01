@@ -5,23 +5,7 @@ import { Bank, Bell, Moon, Sun, User } from "@phosphor-icons/react/dist/ssr";
 // import { Avatar } from '@radix-ui/themes';
 import * as Avatar from '@radix-ui/react-avatar';
 
-const Header = () => {
-    const [theme, setTheme] = useState('dark');
-
-    // Sync theme with localStorage
-    useEffect(() => {
-        const savedTheme = localStorage.getItem('theme') || 'light';
-        setTheme(savedTheme);
-        document.documentElement.classList.toggle('dark', savedTheme === 'dark');
-    }, []);
-
-    // Toggle theme
-    const toggleTheme = () => {
-        const newTheme = theme === 'light' ? 'dark' : 'light';
-        setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
-        document.documentElement.classList.toggle('dark', newTheme === 'dark');
-    };
+const Header = ({ theme, toggleTheme }) => {
 
     return (
         <header className="">

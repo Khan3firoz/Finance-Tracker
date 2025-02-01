@@ -1,0 +1,80 @@
+[
+  {
+    "id": 1,
+    "accountNumber": "123456789012",
+    "bankName": "HDFC Bank",
+    "currentBalance": "75,000.00",
+    "initialBalance": "50,000.00",
+    "totalIncome": " 40,000.00",
+    "totalExpense": " 15,000.00",
+    "totalTransferIn": " 20,000.00",
+    "totalTransferOut": " 10,000.00",
+    "Name": "HDFC9012",
+    "accountType": "savings"
+  },
+  {
+    "id": 2,
+    "accountNumber": "987654321098",
+    "bankName": "Axis Bank",
+    "currentBalance": "1,25,000.00",
+    "initialBalance": "1,00,000.00",
+    "totalIncome": " 60,000.00",
+    "totalExpense": " 35,000.00",
+    "totalTransferIn": " 30,000.00",
+    "totalTransferOut": " 20,000.00",
+    "Name": "Axis1098",
+    "accountType": "current"
+  },
+  {
+    "id": 3,
+    "accountNumber": "456789123045",
+    "bankName": "State Bank of India (SBI)",
+    "currentBalance": "50,000.00",
+    "initialBalance": "50,000.00",
+    "totalIncome": " 30,000.00",
+    "totalExpense": " 30,000.00",
+    "totalTransferIn": " 20,000.00",
+    "totalTransferOut": " 20,000.00",
+    "Name": "SBI3045",
+    "accountType": "savings"
+  },
+  {
+    "id": 4,
+    "accountNumber": "321654987032",
+    "bankName": "ICICI Bank",
+    "currentBalance": "90,000.00",
+    "initialBalance": "70,000.00",
+    "totalIncome": " 50,000.00",
+    "totalExpense": " 30,000.00",
+    "totalTransferIn": " 40,000.00",
+    "totalTransferOut": " 20,000.00",
+    "Name": "ICICI7032",
+    "accountType": "savings"
+  },
+  {
+    "id": 5,
+    "accountNumber": "111122223333",
+    "bankName": "HDFC Bank",
+    "currentBalance": "50,000.00",
+    "initialBalance": "50,000.00",
+    "totalIncome": " 20,000.00",
+    "totalExpense": " 15,000.00",
+    "totalTransferIn": " 10,000.00",
+    "totalTransferOut": " 5,000.00",
+    "Name": "HDFC3333",
+    "accountType": "credit"
+  },
+  {
+    "id": 6,
+    "accountNumber": "444455556666",
+    "bankName": "Axis Bank",
+    "currentBalance": "30,000.00",
+    "initialBalance": "30,000.00",
+    "totalIncome": " 15,000.00",
+    "totalExpense": " 10,000.00",
+    "totalTransferIn": " 5,000.00",
+    "totalTransferOut": " 0.00",
+    "Name": "Axis6666",
+    "accountType": "credit"
+  }
+]

@@ -1,5 +1,5 @@
 /** @type {import('tailwindcss').Config} */
-export default {
+const config = {
   darkMode: 'class',
   content: [
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
@@ -9,10 +9,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: '#FFA000', // Primary color
+        secondary: '#FFC107', // Secondary color
+        text: '#FFFFFF', // Text color (if needed)
       },
     },
   },
   plugins: [],
 };
+
+export default config;

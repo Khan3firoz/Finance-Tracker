@@ -19,3 +19,13 @@ body {
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+/* Hide the scrollbar */
+body, html {
+  overflow: scroll;
+}
+
+/* For WebKit browsers like Chrome, Safari */
+::-webkit-scrollbar {
+  display: none;
+}

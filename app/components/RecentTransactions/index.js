@@ -39,7 +39,7 @@ const transactions = [
 const iconMapping = {
     coffee: (
         <div className="flex items-center justify-center bg-gray-100 dark:bg-gray-600 p-3 rounded-full">
-            <Coffee className="h-6 w-6 " />
+            <Coffee className="h-6 w-6" color="red" />
         </div>
     ),
     house: (

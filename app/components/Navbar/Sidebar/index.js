@@ -14,37 +14,37 @@ const Sidebar = () => {
                     </li>
                     <li className="mb-4 flex items-center dark:text-gray-100 ">
                         <User size={20} className="mr-2" />
-                        <Link href="/about">
+                        <Link href="/account">
                             Account
                         </Link>
                     </li>
                     <li className="mb-4 flex items-center dark:text-gray-100">
                         <ArrowDown size={20} className="mr-2" />
-                        <Link href="/services">
+                        <Link href="/income">
                             Income
                         </Link>
                     </li>
                     <li className="mb-4 flex items-center dark:text-gray-100">
                         <ArrowUp size={20} className="mr-2" />
-                        <Link href="/contact">
+                        <Link href="/expense">
                             Expense
                         </Link>
                     </li>
                     <li className="mb-4 flex items-center dark:text-gray-100">
                         <ArrowsLeftRight size={20} className="mr-2" />
-                        <Link href="/contact">
+                        <Link href="/transfer">
                             Transer
                         </Link>
                     </li>
                     <li className="mb-4 flex items-center dark:text-gray-100">
                         <ArrowClockwise size={20} className="mr-2" />
-                        <Link href="/contact">
+                        <Link href="/subscription">
                             Subscription
                         </Link>
                     </li>
                     <li className="mb-4 flex items-center dark:text-gray-100">
                         <Target size={20} className="mr-2" />
-                        <Link href="/contact">
+                        <Link href="/goals">
                             Goals
                         </Link>
                     </li>

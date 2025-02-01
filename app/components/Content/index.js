@@ -6,6 +6,7 @@ import accountsummary from "../../DummyData/accountsummary.json"
 import HorizontalBarChart from '../HorizontalBarChart'
 import RecentTransactions from '../RecentTransactions'
 import { House } from '@phosphor-icons/react/dist/ssr'
+import ComboChart from '../ComboChart'
 
 const Content = () => {
   return (
@@ -22,6 +23,7 @@ const Content = () => {
           {accountsummary?.map((item) => (<Card key={item?.id} icon={item?.icon} title={item?.name} amount={item?.amount} />))}
         </div>
         <HorizontalBarChart />
+        <ComboChart />
         <RecentTransactions />
       </div>
     </div>
