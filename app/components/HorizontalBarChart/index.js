@@ -1,74 +1,252 @@
-import React from "react";
+import { useState } from 'react';
+import { Bar } from 'react-chartjs-2';
+import { Chart as ChartJS, CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend } from 'chart.js';
+import SelectDropdown from '../SelectDropdown';
 
-const spendingData = [
-    { category: "Housing", amount: 15000, color: "bg-blue-500" },
-    { category: "Food", amount: 10000, color: "bg-green-500" },
-    { category: "Transport", amount: 8000, color: "bg-yellow-500" },
-    { category: "Shopping", amount: 6000, color: "bg-pink-500" },
-    { category: "Utilities", amount: 4000, color: "bg-purple-500" },
+// Register chart.js components
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
+// Categories and Colors
+
+const categories = [
+    "Housing",
+    "Food",
+    "Transport",
+    "Shopping",
+    "Utilities",
+    "Trip",
+    "Entertainment",
+    "EMI",
+    "Clothing",
+    "Education",    // New Category
+    "Internet",     // New Category
 ];
 
-const maxAmount = 20000; // Maximum value for the scale
-const scaleSteps = maxAmount / 2000; // Divide into intervals of ₹5000
-const stepValue = 2000; // Increment per step
+const colors = [
+    '#4B8BF5', // Housing
+    '#42D8B5', // Food
+    '#F5B342', // Transport
+    '#F55A42', // Shopping
+    '#B9F542', // Utilities
+    '#F54B8B', // Trip
+    '#42F5B3', // Entertainment
+    '#8B42F5', // EMI
+    '#F5428B', // Clothing
+    '#F5A242', // Education
+    '#42A2F5', // Internet
+];
 
-const HorizontalBarChart = () => {
+
+const mockYearlyData = {
+    2020: {
+        Housing: 14000,
+        Food: 5800,
+        Transport: 3500,
+        Shopping: 1700,
+        Utilities: 2300,
+        Trip: 2500,
+        Entertainment: 2000,
+        EMI: 3000,
+        Clothing: 1500,
+        Education: 2000,    // New Data
+        Internet: 1200,     // New Data
+    },
+    2021: {
+        Housing: 14500,
+        Food: 6000,
+        Transport: 3600,
+        Shopping: 1800,
+        Utilities: 2400,
+        Trip: 2600,
+        Entertainment: 2100,
+        EMI: 3100,
+        Clothing: 1600,
+        Education: 2200,    // New Data
+        Internet: 1300,     // New Data
+    },
+    2022: {
+        Housing: 14500,
+        Food: 6000,
+        Transport: 3600,
+        Shopping: 1800,
+        Utilities: 2400,
+        Trip: 2600,
+        Entertainment: 2100,
+        EMI: 3100,
+        Clothing: 1600,
+        Education: 2200,    // New Data
+        Internet: 1300,     // New Data
+    },
+    2023: {
+        Housing: 14500,
+        Food: 6000,
+        Transport: 3600,
+        Shopping: 1800,
+        Utilities: 2400,
+        Trip: 2600,
+        Entertainment: 2100,
+        EMI: 3100,
+        Clothing: 1600,
+        Education: 2200,    // New Data
+        Internet: 1300,     // New Data
+    },
+    2024: {
+        Housing: 14500,
+        Food: 6000,
+        Transport: 3600,
+        Shopping: 1800,
+        Utilities: 2400,
+        Trip: 2600,
+        Entertainment: 2100,
+        EMI: 3100,
+        Clothing: 1600,
+        Education: 2200,    // New Data
+        Internet: 1300,     // New Data
+    },
+// Add data for 2022, 2023, and 2024 similarly...
+};
+
+
+// Mock monthly data for each year
+const mockMonthlyData = {
+    2020: {
+        January: { Housing: 1200, Food: 500, Transport: 300, Shopping: 150, Utilities: 200, Trip: 250, Entertainment: 180, EMI: 250, Clothing: 100, Education: 150, Internet: 100 },
+        February: { Housing: 1250, Food: 550, Transport: 320, Shopping: 180, Utilities: 220, Trip: 260, Entertainment: 190, EMI: 270, Clothing: 110, Education: 160, Internet: 120 },
+        // More months...
+    },
+    2021: {
+        January: { Housing: 1300, Food: 600, Transport: 350, Shopping: 250, Utilities: 220, Trip: 270, Entertainment: 200, EMI: 300, Clothing: 120, Education: 170, Internet: 130 },
+        February: { Housing: 1350, Food: 650, Transport: 370, Shopping: 220, Utilities: 240, Trip: 280, Entertainment: 210, EMI: 310, Clothing: 130, Education: 180, Internet: 140 },
+        // More months...
+    },
+    2022: {
+        January: { Housing: 1300, Food: 600, Transport: 350, Shopping: 250, Utilities: 220, Trip: 270, Entertainment: 200, EMI: 300, Clothing: 120, Education: 170, Internet: 130 },
+        February: { Housing: 1350, Food: 650, Transport: 370, Shopping: 220, Utilities: 240, Trip: 280, Entertainment: 210, EMI: 310, Clothing: 130, Education: 180, Internet: 140 },
+        // More months...
+    },
+    2023: {
+        January: { Housing: 1300, Food: 600, Transport: 350, Shopping: 250, Utilities: 220, Trip: 270, Entertainment: 200, EMI: 300, Clothing: 120, Education: 170, Internet: 130 },
+        February: { Housing: 1350, Food: 650, Transport: 370, Shopping: 220, Utilities: 240, Trip: 280, Entertainment: 210, EMI: 310, Clothing: 130, Education: 180, Internet: 140 },
+        // More months...
+    },
+    2024: {
+        January: { Housing: 1200, Food: 500, Transport: 300, Shopping: 150, Utilities: 200, Trip: 250, Entertainment: 180, EMI: 250, Clothing: 100, Education: 150, Internet: 100 },
+        February: { Housing: 1250, Food: 550, Transport: 320, Shopping: 180, Utilities: 220, Trip: 260, Entertainment: 190, EMI: 270, Clothing: 110, Education: 160, Internet: 120 },
+        // More months...
+    }
+    // Add data for 2022, 2023, and 2024 similarly...
+};
+
+
+const ChartComponent = () => {
+    const [viewType, setViewType] = useState('monthly');
+    const [selectedMonth, setSelectedMonth] = useState('January');
+    const [selectedYear, setSelectedYear] = useState('2020');
+
+    // Determine data based on selected view type
+    const data = viewType === 'monthly'
+        ? mockMonthlyData[selectedYear][selectedMonth]
+        : mockYearlyData[selectedYear];
+
+    const chartData = {
+        labels: categories,
+        datasets: [
+            {
+                label: `${viewType.charAt(0).toUpperCase() + viewType.slice(1)} Spending`,
+                data: categories.map(category => data[category]),
+                backgroundColor: colors,
+                borderColor: colors.map(color => color),
+                borderWidth: 1,
+                borderRadius: 16,
+            },
+        ],
+    };
+
+    const handleChangeViewType = (e) => {
+        setViewType(e.target.value);
+    };
+
+    const handleMonthChange = (e) => {
+        setSelectedMonth(e.target.value);
+    };
+
+    const handleYearChange = (e) => {
+        setSelectedYear(e.target.value);
+    };
+
     return (
-        <div className="relative w-full mx-auto p-6 bg-white dark:bg-gray-700 rounded-lg shadow-lg">
-            {/* Chart Header */}
-            <h2 className="text-xl font-bold text-gray-900 dark:text-white mb-6 text-start">
-                Spending by Category
-            </h2>
-
-            {/* Bars and Vertical Line */}
-            <div className="relative">
-                {/* Vertical Line */}
-                <div className="absolute left-16 md:left-32 top-0 bottom-0 w-px bg-gray-400"></div>
-
-                {/* Bars */}
-                <div className="space-y-6">
-                    {spendingData.map((item) => (
-                        <div
-                            key={item.category}
-                            className="flex items-center space-x-4"
-                        >
-                            {/* Category Label */}
-                            <span className="w-16 md:w-32 text-sm font-medium text-gray-600 dark:text-gray-300">
-                                {item.category}
-                            </span>
-                            {/* Horizontal Bar */}
-                            <div className="relative flex-1 h-6 bg-gray-200 dark:bg-gray-700 rounded-lg">
-                                <div
-                                    className={`absolute top-0 left-0 h-full ${item.color} rounded-lg`}
-                                    style={{
-                                        width: `${(item.amount / maxAmount) * 100}%`,
-                                    }}
-                                ></div>
-                            </div>
-                            {/* Amount */}
-                            <span className="w-16 text-sm font-medium text-red-500">
-                                ₹{item.amount}
-                            </span>
-                        </div>
-                    ))}
+        <div className="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-700">
+            {/* Filter to select monthly or yearly */}
+            <div className="mb-4 flex gap-3">
+                <div className='flex items-center justify-between w-full dark:text-white'>
+                    <SelectDropdown
+                        label="View Spending"
+                        value={viewType}
+                        options={['monthly', 'yearly']}
+                        onChange={handleChangeViewType}
+                    />
                 </div>
+
+                {/* Year and Month Selectors */}
+                {viewType === 'monthly' && (
+                    <div>
+                        <SelectDropdown
+                            value={selectedMonth}
+                            options={Object.keys(mockMonthlyData[selectedYear])}
+                            onChange={handleMonthChange}
+                        />
+                    </div>
+                )}
+
+                {viewType === 'yearly' && (
+                    <div>
+                        <SelectDropdown
+                            value={selectedYear}
+                            options={Object.keys(mockYearlyData)}
+                            onChange={handleYearChange}
+                        />
+                    </div>
+                )}
             </div>
 
-            {/* Scale */}
-            <div className="relative py-6">
-                {/* Horizontal Scale Line */}
-                <div className="absolute left-16 md:left-32 w-[calc(100%-4rem)] md:w-[calc(100%-8rem)] h-px bg-gray-300 dark:bg-gray-500"></div>
-                {/* Scale Values */}
-                <div className="absolute left-16 md:left-32 w-[calc(100%-4rem)] md:w-[calc(100%-8rem)] h-px flex justify-between text-xs text-gray-600 dark:text-gray-400 mt-2">
-                    {Array.from({ length: scaleSteps + 1 }).map((_, index) => (
-                        <span key={index} className="text-center">
-                            ₹{index * stepValue}
-                        </span>
-                    ))}
-                </div>
-            </div>
+            {/* Chart */}
+            <Bar data={chartData} options={{
+                responsive: true,
+                indexAxis: 'y', // Horizontal bars
+                plugins: {
+                    title: {
+                        display: true,
+                        text: `${viewType.charAt(0).toUpperCase() + viewType.slice(1)} Spending by Category`,
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function (tooltipItem) {
+                                return `${tooltipItem.raw} INR`;
+                            },
+                        },
+                    },
+                },
+                scales: {
+                    x: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 14,
+                            },
+                        },
+                    },
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            font: {
+                                size: 14,
+                            },
+                        },
+                    },
+                },
+            }} />
         </div>
     );
 };
 
-export default HorizontalBarChart;
+export default ChartComponent;

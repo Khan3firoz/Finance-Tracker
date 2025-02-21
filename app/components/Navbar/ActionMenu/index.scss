@@ -1,0 +1,149 @@
+// *,
+// *::before,
+// *::after {
+//     box-sizing: border-box;
+// }
+
+// body {
+//     background: #fce4ec;
+//     position: absolute;
+//     left: 50%;
+//     top: 40%;
+// }
+
+// // ------------------------- Separate line -------------------------
+
+// $shape-color: #fff;
+// $shape-background: #dc143c;
+// $shape-color-hover: #dc143c;
+// $shape-background-hover: #f08080;
+// $shape-color-active-focus: #8b0000;
+// $menu-items: 5;
+// $hamburger-spacing: 8px;
+// $delay-init: 0.08s;
+// $delay-interval: 0.1s;
+// $open-distance: 105px;
+
+// @mixin shape {
+//     background: $shape-background;
+//     border-radius: 100%;
+//     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.25);
+//     color: $shape-color;
+//     height: 80px;
+//     line-height: 80px;
+//     margin-left: -40px;
+//     position: absolute;
+//     text-align: center;
+//     top: 20px;
+//     transform: translate3d(0, 0, 0);
+//     transition: transform ease-out 0.2s;
+//     width: 80px;
+// }
+
+// .circular-menu {
+//     font-size: 20px;
+//     width: 400px;
+//     height: 250px;
+//     margin-left: calc(-400px / 2);
+//     margin-top: 5rem;
+//     padding-left: calc(400px / 2);
+//     padding-top: 20px;
+
+//     &__button {
+//         display: none;
+
+//         &:checked+.circular-menu__icon {
+//             transform: scale(0.8, 0.8) translate3d(0, 0, 0);
+//             transition-duration: 0.2s;
+//             transition-timing-function: linear;
+
+//             .hamburger-bar:nth-child(1) {
+//                 transform: translate3d(0, 0, 0) rotate(45deg);
+//             }
+
+//             .hamburger-bar:nth-child(2) {
+//                 transform: translate3d(0, 0, 0) scale(0.1, 1);
+//             }
+
+//             .hamburger-bar:nth-child(3) {
+//                 transform: translate3d(0, 0, 0) rotate(-45deg);
+//             }
+//         }
+
+//         &:checked~.circular-menu__item {
+//             transition-timing-function: cubic-bezier(0.935, 0, 0.34, 1.33);
+
+//             @for $i from 1 through $menu-items {
+//                 $pi: 3.141592653;
+//                 $opening-angle: $pi * 2;
+//                 $angle: (
+//                     $pi - $opening-angle) / 2 + $opening-angle / $menu-items * ($i - 1
+//                 );
+
+//             &:nth-of-type(#{$i}) {
+//                 transition-duration: ($delay-init + $delay-interval * $i);
+//                 transform: translate3d(cos($angle) * $open-distance, sin($angle) * $open-distance, 0);
+//             }
+//         }
+//     }
+// }
+
+// &__icon {
+//     @include shape;
+//     cursor: pointer;
+//     transform: scale(1.1, 1.1) translate3d(0, 0, 0);
+//     transition-duration: 0.4s;
+//     transition-timing-function: cubic-bezier(0.175, 0.885, 0.32, 1.275);
+//     z-index: 2;
+
+//     &:hover {
+//         transform: scale(1.2, 1.2) translate3d(0, 0, 0);
+//     }
+
+//     .hamburger {
+//         background: $shape-color;
+//         display: block;
+//         width: 25px;
+//         height: 3px;
+//         left: 50%;
+//         margin-left: -12.5px;
+//         margin-top: -1.5px;
+//         position: absolute;
+//         top: 50%;
+//         transition: transform 0.2s;
+
+//         &-bar:nth-child(1) {
+//             transform: translate3d(0, -$hamburger-spacing, 0);
+//         }
+
+//         &-bar:nth-child(2) {
+//             transform: translate3d(0, 0, 0);
+//         }
+
+//         &-bar:nth-child(3) {
+//             transform: translate3d(0, $hamburger-spacing, 0);
+//         }
+//     }
+// }
+
+// &__item {
+//     @include shape;
+//     font-size: 32px;
+
+//     @for $i from 1 through $menu-items {
+//         &:nth-of-type(#{$i}) {
+//             transition-duration: 0.18s;
+//         }
+//     }
+
+//     &:hover {
+//         color: $shape-color-hover;
+//         background: $shape-background-hover;
+//     }
+
+//     &:active,
+//     &:focus {
+//         color: $shape-color-active-focus;
+//     }
+// }
+// }

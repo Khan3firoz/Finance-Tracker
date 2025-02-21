@@ -8,6 +8,7 @@ import Header from "./components/Navbar/Header";
 import Sidebar from "./components/Navbar/Sidebar";
 import { usePathname } from "next/navigation";
 import SideNav from "./components/Navbar/SideNav";
+import FloatingMenu from "./components/Navbar/ActionMenu";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -34,17 +35,20 @@ export default function RootLayout({ children }) {
   const [theme, setTheme] = useState('dark')
 
   const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
+    const newTheme = theme === 'light' ? 'light' : 'dark';
+    debugger
     setTheme(newTheme);
     localStorage.setItem('theme', newTheme);
     document.documentElement.classList.toggle('dark', newTheme === 'dark');
   };
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light';
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    console.log(savedTheme, "saveTheme")
     setTheme(savedTheme);
     document.documentElement.classList.toggle('dark', savedTheme === 'dark');
   }, []);
+  console.log(theme, "theme-->")
 
   return (
     <html lang="en">
@@ -54,6 +58,7 @@ export default function RootLayout({ children }) {
         <AppProvider>
           <FilterProvider>
             <SideNav />
+            {/* <FloatingMenu /> */}
             {!isAuthPage ? (
               <div className=" mx-auto h-auto p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow  min-h-screen overflow-auto">
                 <Header theme={theme} toggleTheme={toggleTheme} />

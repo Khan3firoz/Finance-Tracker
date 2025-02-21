@@ -119,41 +119,44 @@ const FinancialChart = () => {
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-700">
-            <div className="flex flex-wrap gap-4 mb-4">
-                <select
-                    value={view}
-                    onChange={e => setView(e.target.value)}
-                    className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-white"
-                >
-                    <option value="daily">Daily</option>
-                    <option value="monthly">Monthly</option>
-                    <option value="yearly">Yearly</option>
-                </select>
-
-                {view !== 'yearly' && (
+            <div className="flex items-center justify-between gap-4 mb-4">
+                <h2 className="text-lg font-semibold text-gray-700 dark:text-white">Financial Overview</h2>
+                <div className='flex items-center gap-3'>
                     <select
-                        value={selectedYear}
-                        onChange={e => setSelectedYear(parseInt(e.target.value))}
+                        value={view}
+                        onChange={e => setView(e.target.value)}
                         className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-white"
                     >
-                        {[...Array(6)].map((_, i) => {
-                            const year = new Date().getFullYear() - 5 + i;
-                            return <option key={year} value={year}>{year}</option>;
-                        })}
+                        <option value="daily">Daily</option>
+                        <option value="monthly">Monthly</option>
+                        <option value="yearly">Yearly</option>
                     </select>
-                )}
 
-                {view === 'daily' && (
-                    <select
-                        value={selectedMonth}
-                        onChange={e => setSelectedMonth(parseInt(e.target.value))}
-                        className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-white"
-                    >
-                        {[...Array(12)].map((_, i) => (
-                            <option key={i} value={i}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
-                        ))}
-                    </select>
-                )}
+                    {view !== 'yearly' && (
+                        <select
+                            value={selectedYear}
+                            onChange={e => setSelectedYear(parseInt(e.target.value))}
+                            className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-white"
+                        >
+                            {[...Array(6)].map((_, i) => {
+                                const year = new Date().getFullYear() - 5 + i;
+                                return <option key={year} value={year}>{year}</option>;
+                            })}
+                        </select>
+                    )}
+
+                    {view === 'daily' && (
+                        <select
+                            value={selectedMonth}
+                            onChange={e => setSelectedMonth(parseInt(e.target.value))}
+                            className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-white"
+                        >
+                            {[...Array(12)].map((_, i) => (
+                                <option key={i} value={i}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
+                            ))}
+                        </select>
+                    )}
+                </div>
             </div>
 
             <canvas ref={chartRef} className="w-full"></canvas>

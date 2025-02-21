@@ -38,16 +38,18 @@ const Header = ({ theme, toggleTheme }) => {
                     </div>
                     {/* Notification Icon */}
                     <button
+                        onClick={() => console.log("Click")}
                         className="flex items-center justify-center rounded  focus:outline-none dark:hover:bg-gray-700"
                         aria-label="Notifications"
                     >
                         <Bell className="w-6 h-6 text-gray-700 dark:text-gray-100" />
                     </button>
                     {/* Dark/Light Mode Toggle */}
+                    {console.log(theme, "theme")}
                     <button
-                        onClick={toggleTheme}
+                        onClick={() => console.log("Click")}
                         className="flex items-center justify-center rounded focus:outline-none dark:hover:bg-gray-700"
-                        aria-label="Toggle Dark Mode"
+                        // aria-label="Toggle Dark Mode"
                     >
                         {theme === 'light' ? (
                             <Moon className="text-gray-700 w-6 h-6" />
