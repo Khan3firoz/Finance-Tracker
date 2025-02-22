@@ -4,6 +4,8 @@ import TextBox from '../components/TextBox';
 import { useForm } from 'react-hook-form';
 import Button from '../components/Button';
 import { UserCircle } from '@phosphor-icons/react/dist/ssr';
+import SignupForm from '../components/SignupForm';
+import LoginForm from '../components/LoginForm';
 
 function Login() {
     const [signIn, toggle] = React.useState(true);
@@ -27,30 +29,13 @@ function Login() {
                             <p className='text-base text-white text-center'> Enter your personal details and start your journey with us</p>
                             <button
                                 onClick={handleToggle}
-                                className={`w-1/2 py-2 border-2 ${!signIn ? 'text-gray-700 border-gray-700' : 'text-white  border-white'}  rounded-3xl bg-transparent`}
+                                className={`w-1/2 py-2 border-2 ${!signIn ? 'text-gray-700 border-gray-700' : 'text-white  border-white'}  rounded-lg bg-transparent`}
                             >
                                 SIGN UP
                             </button>
                         </div>
                     ) : (
-                        <div className='max-w-80 mx-auto flex flex-col items-center justify-center h-full space-y-6'>
-                            <div className={`w-full flex flex-col items-center justify-center ${signIn ? 'text-gray-100' : 'text-gray-700'} text-3xl text-center`}>
-                                <UserCircle size={50} />
-                                <h2>Create Account</h2>
-                            </div>
-                            <div className='space-y-2 w-full'>
-                                <TextBox register={register} name='email' label='Email' errors={errors} placeholder='Enter your email' />
-                                <TextBox register={register} name='password' label='Password' errors={errors} placeholder='Enter your password' />
-                            </div>
-                            <div className='text-center w-full'>
-                                <button
-                                    onClick={handleToggle}
-                                    className={`w-1/2 py-2 border-2 ${signIn ? 'text-white  border-white' : ' text-gray-700 border-gray-700'} rounded-full bg-transparent`}
-                                >
-                                    SIGN UP
-                                </button>
-                            </div>
-                        </div>
+                            <SignupForm />
                     )}
                 </div>
 
@@ -65,31 +50,13 @@ function Login() {
                             <p className='text-base text-white text-center'> To keep connected with us please login with your personal info</p>
                             <button
                                 onClick={handleToggle}
-                                className={`w-1/2 py-2 border-2 ${signIn ? 'text-gray-700 border-gray-700' : 'text-white  border-white'}  rounded-full bg-transparent`}
+                                className={`w-1/2 py-2 border-2 ${signIn ? 'text-gray-700 border-gray-700' : 'text-white  border-white'}  rounded-lg bg-transparent`}
                             >
                                 LOGIN
                             </button>
                         </div>
                     ) : (
-                        <div className='max-w-80 mx-auto flex flex-col items-center justify-center h-full space-y-6'>
-                            <div className='w-full flex flex-col items-center justify-center text-gray-700 text-3xl text-center'>
-                                <UserCircle size={50} />
-                                <h2>Login Account</h2>
-                            </div>
-                            <div className='w-full space-y-2'>
-                                <TextBox register={register} name='email' label='Email' errors={errors} placeholder='Enter your email' />
-                                <TextBox register={register} name='password' label='Password' errors={errors} placeholder='Enter your Password' />
-                            </div>
-
-                            <div className='w-full text-center'>
-                                <button
-                                    onClick={handleToggle}
-                                    className={`w-1/2 py-2 border-2 ${signIn ? 'text-gray-700 border-gray-700' : 'text-white  border-white'}  rounded-3xl bg-transparent`}
-                                >
-                                    LOGIN
-                                </button>
-                            </div>
-                        </div>
+                            <LoginForm />
                     )}
 
                 </div>

@@ -8,6 +8,8 @@ import Header from "./components/Navbar/Header";
 import Sidebar from "./components/Navbar/Sidebar";
 import { usePathname } from "next/navigation";
 import SideNav from "./components/Navbar/SideNav";
+import { ExpenceProvider } from "./Context/ExpenceContext";
+import { ToastProvider } from "./Context/TosterProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -52,7 +54,9 @@ export default function RootLayout({ children }) {
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-700  min-h-screen overflow-auto`}
       >
         <AppProvider>
+          <ToastProvider>
           <FilterProvider>
+            <ExpenceProvider>
             <SideNav />
             {!isAuthPage ? (
               <div className=" mx-auto h-auto p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow  min-h-screen overflow-auto">
@@ -63,8 +67,10 @@ export default function RootLayout({ children }) {
               </div>
             ) : (
                 <main className="min-h-screen overflow-auto">{children}</main>
-            )}
-          </FilterProvider>
+                )}
+            </ExpenceProvider>
+            </FilterProvider>
+          </ToastProvider>
         </AppProvider>
       </body>
     </html>

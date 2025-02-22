@@ -1,70 +1,95 @@
+'use client'
 import React, { useState } from 'react'
 import './SideNav.scss'
 import { Gear, HourglassMedium, List, SignOut, X } from '@phosphor-icons/react/dist/ssr'
 import { ArrowDown, ArrowsLeftRight, ArrowUp, User, Subscription, ArrowClockwise, Target, House } from '@phosphor-icons/react/dist/ssr';
 import Link from 'next/link';
 import { Bank } from '@phosphor-icons/react';
+import { usePathname, useRouter } from 'next/navigation';
+import { logoutUser } from '@/app/service/user.service';
+import storage from '@/utils/storage';
 
 
 function SideNav() {
-
+    const pathname = usePathname(); // Get current path
+    const routes = useRouter()
+    const hideSidebar = pathname === "/login" || pathname === "/signup";
     const [openMenu, setOpenMenu] = useState(false)
     function handleToggeleMenu() {
         setOpenMenu(!openMenu)
     }
 
+    const handleOnChange = (event) => {
+        console.log(event, "e")
+    }
+    if (hideSidebar) {
+        return null
+    }
+
+    const handleLogout = async () => {
+        console.log("logout")
+        try {
+            const res = await logoutUser()
+            console.log(res)
+            storage.signOut()
+            routes.push('/login')
+        } catch (err) {
+            console.log(err, "err")
+            error(err?.message)
+        }
+    }
     return (
-        <div>
-            <input type="checkbox" id="menu-toggle" checked={!openMenu} />
+        <div className='none'>
+            <input type="checkbox" id="menu-toggle" checked={!openMenu} onChange={handleOnChange} />
             <div className="menu dflex">
                 <div id="logoCSS3" className="text-center flex items-start gap-3 flex-col mt-12 ml-8">
                     <Bank size={50} className="text-gray-800 dark:text-white" weight="light" />
                     <span className="text-xl font-bold dark:text-white text-gray-700">Finance Tracker</span>
                 </div>
                 <div className="elements-container dflex ml-6">
-                    <a className="element dark:text-gray-100 flex items-center">
+                    <div className="element dark:text-gray-100 flex items-center">
                         <House size={20} className="mr-2" />
                         <Link href="/">
                             Dashboard
                         </Link>
-                    </a>
-                    <a className="element dark:text-gray-100 flex items-center">
+                    </div>
+                    <div className="element dark:text-gray-100 flex items-center">
                         <User size={20} className="mr-2" />
                         <Link href="/account">
                             Account
                         </Link>
-                    </a>
-                    <a className="element dark:text-gray-100 flex items-center">
+                    </div>
+                    <div className="element dark:text-gray-100 flex items-center">
                         <ArrowDown size={20} className="mr-2" />
                         <Link href="/income">
                             Income
                         </Link>
-                    </a>
-                    <a className="element dark:text-gray-100 flex items-center">
+                    </div>
+                    <div className="element dark:text-gray-100 flex items-center">
                         <ArrowUp size={20} className="mr-2" />
                         <Link href="/expense">
                             Expense
                         </Link>
-                    </a>
+                    </div>
 
-                    <a className="element dark:text-gray-100 flex items-center">
+                    <div className="element dark:text-gray-100 flex items-center">
                         <ArrowClockwise size={20} className="mr-2" />
                         <Link href="/subscription">
                             Subscription
                         </Link>
-                    </a>
-                    <a className="element dark:text-gray-100 flex items-center">
+                    </div>
+                    <div className="element dark:text-gray-100 flex items-center">
                         <Target size={20} className="mr-2" />
                         <Link href="/goals">
                             Goals
                         </Link>
-                    </a>
-                    <a className="element dark:text-gray-100 flex items-center ">
+                    </div>
+                    <div className="element dark:text-gray-100 flex items-center ">
                         <SignOut size={20} className="mr-2" />
-                        <button>
+                        <button onClick={handleLogout}>
                             Logout
                         </button>
-                    </a>
+                    </div>
                 </div>
                 <div className="menu-container-btn">
                     <div className="menu-toggle-btn">

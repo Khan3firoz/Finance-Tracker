@@ -4,9 +4,11 @@ import Image from 'next/image';
 import { Bank, Bell, Moon, Sun, User } from "@phosphor-icons/react/dist/ssr";
 // import { Avatar } from '@radix-ui/themes';
 import * as Avatar from '@radix-ui/react-avatar';
+import storage from '@/utils/storage';
 
 const Header = ({ theme, toggleTheme }) => {
-
+    const userData = storage.getUser()
+    console.log(userData, "userData")
     return (
         <header className="">
             <nav className="container mx-auto flex items-center justify-between p-4">
@@ -21,10 +23,13 @@ const Header = ({ theme, toggleTheme }) => {
                 <div className="flex items-center space-x-4">
                     {/* User Avatar and Name */}
                     <div className="flex items-center space-x-2">
+                        {console.log(userData?.avatar, 'avatar')}
                         <Avatar.Root className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-300 overflow-hidden">
                             <Avatar.Image
                                 className="w-full h-full object-cover"
-                                src="/avatar-placeholder.png"
+                                // src='http://res.cloudinary.com/iam-atts/image/upload/v1740248340/avatar/vuft8grardfddl7vnhzo.png'
+                                src={userData?.user?.avatar}
+                                crossOrigin="anonymous"
                                 alt="User Avatar"
                             />
                             <Avatar.Fallback
@@ -34,7 +39,7 @@ const Header = ({ theme, toggleTheme }) => {
                                 FK
                             </Avatar.Fallback>
                         </Avatar.Root>
-                        <span className="text-gray-700 dark:text-gray-100">Firoz Khan</span>
+                        <span className="text-gray-700 dark:text-gray-100">{userData?.user?.fullName}</span>
                     </div>
                     {/* Notification Icon */}
                     <button

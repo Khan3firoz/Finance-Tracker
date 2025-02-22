@@ -7,11 +7,15 @@ import HorizontalBarChart from '../HorizontalBarChart'
 import RecentTransactions from '../RecentTransactions'
 import { House } from '@phosphor-icons/react/dist/ssr'
 import ComboChart from '../ComboChart'
+import FloatingActionButton from '../FloatingActionButton'
+import ExpenceModal from '@/app/Modal/AddExpenceModal'
+import { useExpenceContext } from '@/app/Context/ExpenceContext'
 
 const Content = () => {
+  // const { isOpen, handleClosed } = useExpenceContext();
   return (
     <div className="flex-1 p-6">
-      <div className="flex items-center mr-2 dark:text-gray-100 space-x-4 px-4">
+      <div className="container mx-auto flex items-center dark:text-gray-100 space-x-4 px-4">
         <House size={40} />
         <h1 className="text-3xl font-semibold dark:text-white">Dashboard</h1>
       </div>
@@ -25,6 +29,8 @@ const Content = () => {
         <HorizontalBarChart />
         <ComboChart />
         <RecentTransactions />
+        <FloatingActionButton />
+        {/* {isOpen && <ExpenceModal />} */}
       </div>
     </div>
   )
