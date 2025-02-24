@@ -1,9 +1,9 @@
 'use client'
+import React, { useState, useEffect } from 'react';
 import { ArrowDown, ArrowUp, DotsThreeVertical } from '@phosphor-icons/react/dist/ssr';
-import React, { useState } from 'react';
 import Pagination from './components/Pagination';
 
-export default function DynamicTable({ sortable = false, data }) {
+export default function DynamicTable({ sortable = false, data, columns }) {
     const [tableData, setTableData] = useState(data || []);
     const [menuOpen, setMenuOpen] = useState(false);
     const [sortConfig, setSortConfig] = useState({
@@ -26,10 +26,16 @@ export default function DynamicTable({ sortable = false, data }) {
             : {}
     );
 
-    const columns = data?.length > 0 ? Object.keys(data[0]).map((key) => ({
-        key: key,
-        label: key.replace(/([A-Z])/g, ' $1').toUpperCase(), // Optionally, format column label
-    })) : [];
+    // const columns = data?.length > 0 ? Object.keys(data[0]).map((key) => ({
+    //     key: key,
+    //     label: key.replace(/([A-Z])/g, ' $1').toUpperCase(), // Optionally, format column label
+    // })) : [];
+
+    useEffect(() => {
+        if (data) {
+            setTableData(data)
+        }
+    }, [data])
 
     const handleSort = (key) => {
         if (!sortable) return;

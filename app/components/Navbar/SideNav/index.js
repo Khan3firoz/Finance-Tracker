@@ -8,10 +8,12 @@ import { Bank } from '@phosphor-icons/react';
 import { usePathname, useRouter } from 'next/navigation';
 import { logoutUser } from '@/app/service/user.service';
 import storage from '@/utils/storage';
+import { useToast } from '@/app/Context/TosterProvider';
 
 
 function SideNav() {
     const pathname = usePathname(); // Get current path
+    const { error, success } = useToast()
     const routes = useRouter()
     const hideSidebar = pathname === "/login" || pathname === "/signup";
     const [openMenu, setOpenMenu] = useState(false)
@@ -27,10 +29,8 @@ function SideNav() {
     }
 
     const handleLogout = async () => {
-        console.log("logout")
         try {
             const res = await logoutUser()
-            console.log(res)
             storage.signOut()
             routes.push('/login')
         } catch (err) {

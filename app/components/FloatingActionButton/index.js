@@ -5,16 +5,20 @@ import Draggable from "react-draggable";
 import { motion } from "framer-motion";
 import { PlusIcon, PencilIcon, TrashIcon, CogIcon } from "@heroicons/react/24/solid";
 import { useExpenceContext } from "@/app/Context/ExpenceContext";
+import { useAppContext } from "@/app/Context/AppContext";
+import { Bank, SignOut, SquaresFour } from "@phosphor-icons/react/dist/ssr";
+import { Wallet } from "@phosphor-icons/react";
 
 
 
 const DraggableFloatingButton = () => {
     const { handleOpen, handleClosed } = useExpenceContext();
+    const { handleAddCategory, handleAddTransaction } = useAppContext()
 
     const menuItems = [
-        { icon: <PlusIcon className="w-6 h-6 text-blue-500" />, label: "Edit", onClick: handleOpen },
-        { icon: <TrashIcon className="w-6 h-6 text-red-500" />, label: "Delete", onClick: () => alert("Delete Clicked") },
-        { icon: <CogIcon className="w-6 h-6 text-gray-500" />, label: "Settings", onClick: () => alert("Settings Clicked") },
+        { icon: <Bank className="w-6 h-6 text-blue-500" />, label: "Edit", onClick: handleOpen },
+        { icon: <Wallet className="w-6 h-6 text-red-500" />, label: "Delete", onClick: handleAddTransaction },
+        { icon: <SquaresFour className="w-6 h-6 text-gray-500" />, label: "Create Category", onClick: handleAddCategory },
         { icon: <PencilIcon className="w-6 h-6 text-green-500" />, label: "Share", onClick: () => alert("Share Clicked") }
     ];
 

@@ -9,5 +9,9 @@ export const loginUser = async (payload) => {
 }
 
 export const logoutUser = async () => {
-    return await axios.post('/users/logout')
+    return await axios.get('/users/logout')
+}
+
+export const fetchUserDetails = async () => {
+    return await axios.get('users/current-user')
 }

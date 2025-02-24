@@ -1,13 +1,54 @@
 'use client'
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useEffect, useState } from "react";
+import { fetchUserDetails } from "../service/user.service";
+import { fetchCategory } from "../service/category.service";
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
     const [user, setUser] = useState(null); // Example state for a user
+    const [isAddCat, setIsAddCat] = useState(false)
+    const [isAddTxn, setIsAddTxn] = useState(false)
+
+    const getUser = async () => {
+        try {
+            const res = await fetchUserDetails()
+            setUser(res?.data)
+        } catch (error) {
+            console.log({ error })
+        }
+    }
+
+    const getCategoryList = async () => {
+        try {
+            const res = await fetchCategory(user?._id)
+            console.log({ res })
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    useEffect(() => {
+        getUser()
+    }, [])
+
+    useEffect(() => {
+        if (user) {
+            getCategoryList()
+        }
+    }, [user])
+
+    const handleAddCategory = () => {
+        setIsAddCat(true)
+    }
+
+    const handleAddTransaction = () => {
+        setIsAddTxn(true)
+    }
 
     return (
-        <AppContext.Provider value={{ user, setUser }}>
+        <AppContext.Provider value={{
+            user, setUser, isAddCat, setIsAddCat, handleAddCategory, handleAddTransaction, isAddTxn, setIsAddTxn
+        }}>
             {children}
         </AppContext.Provider>
     );

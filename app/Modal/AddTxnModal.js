@@ -11,6 +11,7 @@ import { accountTypeOptions } from "../account/const";
 import { createAccount } from "../service/account.service";
 import { useToast } from "../Context/TosterProvider";
 import storage from "@/utils/storage";
+import { useAppContext } from "../Context/AppContext";
 
 const schema = yup.object().shape({
     amount: yup.number().positive("Amount must be positive").required("Amount is required"),
@@ -25,8 +26,8 @@ const schema = yup.object().shape({
     isDefault: yup.boolean(),
 });
 
-const AddAccountModal = () => {
-    const { isOpen, handleClosed } = useExpenceContext();
+const AddTxnModal = () => {
+    const { isAddTxn,setIsAddTxn } = useAppContext()
     const { success, error } = useToast()
     const defaultValues = {
         currency: '₹'
@@ -58,14 +59,14 @@ const AddAccountModal = () => {
             const res = await createAccount(reqBody)
             success(res?.message)
             reset(); // Reset form after submission
-            handleClosed(); // Close modal
+            setIsAddTxn(false); // Close modal
         } catch (err) {
             error(err?.message)
         }
 
     };
 
-    if (!isOpen) return null;
+    if (!isAddTxn) return null;
 
     return (
         <motion.div
@@ -81,7 +82,7 @@ const AddAccountModal = () => {
                 animate={{ scale: 1 }}
                 exit={{ scale: 0.8 }}
             >
-                <h2 className="text-xl font-semibold mb-4 text-gray-950">Add Account</h2>
+                <h2 className="text-xl font-semibold mb-4 text-gray-950">Add Transaction</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                     {/* Two fields per row using grid layout */}
@@ -120,7 +121,7 @@ const AddAccountModal = () => {
                     <div className="flex justify-end space-x-2">
                         <button
                             type="button"
-                            onClick={handleClosed}
+                            onClick={() => setIsAddTxn(false)}
                             className="px-4 py-2 bg-gray-400 text-white rounded-md hover:bg-gray-500"
                         >
                             Cancel
@@ -129,7 +130,7 @@ const AddAccountModal = () => {
                             type="submit"
                             className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700"
                         >
-                            Add Account
+                            Add Transaction
                         </button>
                     </div>
                 </form>
@@ -138,4 +139,4 @@ const AddAccountModal = () => {
     );
 };
 
-export default AddAccountModal;
+export default AddTxnModal;
