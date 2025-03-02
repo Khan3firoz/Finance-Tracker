@@ -8,6 +8,7 @@ import { loginUser } from "@/app/service/user.service";
 import storage from "@/utils/storage";
 import { useToast } from "@/app/Context/TosterProvider";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/app/Context/AuthContext";
 
 // ✅ Define Validation Schema
 const schema = Yup.object().shape({
@@ -19,6 +20,7 @@ const schema = Yup.object().shape({
 
 function LoginForm() {
     const { success, error } = useToast()
+    const { login } = useAuth();
     const routes=useRouter()
     const {
         register,
@@ -29,12 +31,26 @@ function LoginForm() {
     });
 
     // ✅ Handle form submission
+
+    // const handleLogin = async (e) => {
+    //     e.preventDefault();
+    //     try {
+    //         const response = await axios.post("/auth/login", { email, password });
+    //         login(response.token);
+    //     } catch (err) {
+    //         setError(err.response?.data?.message || "Login failed");
+    //     }
+    // };
+
     const onSubmit = async (data) => {
         try {
             const res = await loginUser(data)
             const token = res?.data?.accessToken
-            storage.setToken(token)
-            storage.setUser(res?.data?.user)
+            debugger
+            login(token)
+            debugger
+            // storage.setToken(token)
+            // storage.setUser(res?.data?.user)
             routes.push('/')
             success(res?.message)
         } catch (err) {

@@ -1,4 +1,4 @@
-import { axios } from "./axios"
+import { axios } from "@/lib/axios"
 
 export const createUser = async (payload) => {
     return await axios.post('/users/register',payload)

@@ -10,6 +10,7 @@ import { usePathname } from "next/navigation";
 import SideNav from "./components/Navbar/SideNav";
 import { ExpenceProvider } from "./Context/ExpenceContext";
 import { ToastProvider } from "./Context/TosterProvider";
+import { AuthProvider } from "./Context/AuthContext";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -48,30 +49,34 @@ export default function RootLayout({ children }) {
     document.documentElement.classList.toggle('dark', savedTheme === 'dark');
   }, []);
 
+  console.log({ isAuthPage })
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased dark:bg-gray-700  min-h-screen overflow-auto`}
       >
-        <AppProvider>
-          <ToastProvider>
-          <FilterProvider>
-            <ExpenceProvider>
-            <SideNav />
-            {!isAuthPage ? (
-              <div className=" mx-auto h-auto p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow  min-h-screen overflow-auto">
-                <Header theme={theme} toggleTheme={toggleTheme} />
-                <div className="flex w-full ">
-                  <main className="p-4 w-full mx-10">{children}</main>
-                </div>
-              </div>
-            ) : (
-                <main className="min-h-screen overflow-auto">{children}</main>
-                )}
-            </ExpenceProvider>
-            </FilterProvider>
-          </ToastProvider>
-        </AppProvider>
+        <AuthProvider>
+          <AppProvider>
+            <ToastProvider>
+              <FilterProvider>
+                <ExpenceProvider>
+                  <SideNav />
+                  {!isAuthPage ? (
+                    <div className=" mx-auto h-auto p-4 bg-gray-100 dark:bg-gray-700 rounded-lg shadow  min-h-screen overflow-auto">
+                      <Header theme={theme} toggleTheme={toggleTheme} />
+                      <div className="flex w-full ">
+                        <main className="p-4 w-full mx-10">{children}</main>
+                      </div>
+                    </div>
+                  ) : (
+                    <main className="min-h-screen overflow-auto">{children}</main>
+                  )}
+                </ExpenceProvider>
+              </FilterProvider>
+            </ToastProvider>
+          </AppProvider>
+        </AuthProvider>
       </body>
     </html>
   );

@@ -1,10 +1,11 @@
 import storage from '@/utils/storage';
 import Axios from 'axios';
+import Cookies from "js-cookie";
 
 const apiurl = process.env.NEXT_PUBLIC_SITE_URL;
 function authRequestInterceptor(config) {
     config.headers = config.headers ?? {};
-    const token = storage.getToken();
+    const token = Cookies.get("token");
     if (token && token.accessToken) {
         config.headers.authorization = `Bearer ${token.accessToken}`;
     }

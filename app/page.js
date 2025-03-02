@@ -7,10 +7,13 @@ import AddAccountModal from "./Modal/AddAccountModal";
 import { useAppContext } from "./Context/AppContext";
 import AddCategoryModal from "./Modal/AddCategory";
 import AddTxnModal from "./Modal/AddTxnModal";
+import { useAuth } from "./Context/AuthContext";
+import { useRouter } from "next/navigation";
 
 export default function Home() {
   const { isOpen, handleClosed } = useExpenceContext();
   const { isAddCat, isAddTxn } = useAppContext()
+  const routes = useRouter()
 
   return (
     <>
