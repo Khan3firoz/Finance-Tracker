@@ -1,76 +1,170 @@
 "use client";
-
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import * as yup from "yup";
 import { motion } from "framer-motion";
-import { useExpenceContext } from "../Context/ExpenceContext";
+import { useAppContext } from "../Context/AppContext";
+import { useToast } from "../Context/TosterProvider";
 import TextBox from "../components/TextBox";
 import CustomSelect from "../components/CustomSelect";
 import { accountTypeOptions } from "../account/const";
-import { createAccount } from "../service/account.service";
-import { useToast } from "../Context/TosterProvider";
+import { createAccount, createTransaction, fetchAccountList } from "../service/account.service";
 import storage from "@/utils/storage";
-import { useAppContext } from "../Context/AppContext";
+import { fetchCategory } from "../service/category.service";
+import { fetchBudgetList } from "../service/budget.service";
+import { fetchAllUser } from "../service/user.service";
+
+// Dummy options (Replace these with API data)
+const transactionTypeOptions = [
+    { label: "Income", value: "credit" },
+    { label: "Expense", value: "debit" },
+];
+
+
+const accountOptions = [
+    { label: "Main Account", value: "6794f114fb0ba7a3a482625a" },
+    { label: "Savings Account", value: "account-id-2" },
+];
+
+const budgetOptions = [
+    { label: "Monthly Budget", value: "budget-id-1" },
+    { label: "Annual Budget", value: "budget-id-2" },
+];
+
+const tagOptions = [
+    { label: "Food", value: "food" },
+    { label: "Monthly", value: "monthly" },
+];
 
 const schema = yup.object().shape({
     amount: yup.number().positive("Amount must be positive").required("Amount is required"),
+    transactionType: yup.string().required("Transaction Type is required"),
+    accountId: yup.string().required("Account is required"),
+    categoryId: yup.string().required("Category is required"),
     description: yup.string().required("Description is required"),
-    accountType: yup.string().required("Account Type is required"),
-    accountName: yup.string().required("Account Name is required"),
-    accountNumber: yup.string().required("Account Number is required"),
-    currency: yup.string().required("Currency is required"),
-    balance: yup.number().required("Balance is required"),
-    iban: yup.string().nullable(),
-    swiftCode: yup.string().nullable(),
-    isDefault: yup.boolean(),
+    tags: yup.array(),
+    isRecurring: yup.boolean(),
+    location: yup.string(),
+    sharedWith: yup.array(),
+    budgetId: yup.string().nullable(),
 });
 
 const AddTxnModal = () => {
-    const { isAddTxn,setIsAddTxn } = useAppContext()
-    const { success, error } = useToast()
-    const defaultValues = {
-        currency: '₹'
+    const { isAddTxn, setIsAddTxn } = useAppContext();
+    const { success, error } = useToast();
+    const { user } = useAppContext();
+    const [categoryList, setCategoryList] = useState([])
+    const [accountList, setAccountList] = useState([])
+    const [budgetList, setBudgetList] = useState([])
+    const [usersList, setUsersList] = useState([])
+
+    const getCategoryList = async () => {
+        try {
+            const res = await fetchCategory(user?._id)
+            const categoryOptions = res?.data?.categories.map(category => ({
+                label: category?.name,
+                value: category?._id
+            }));
+            setCategoryList(categoryOptions)
+        } catch (error) {
+            console.log(error)
+        }
     }
+    const getAccountsList = async () => {
+        try {
+            const res = await fetchAccountList(user?._id)
+            const accountOptions = res?.data?.accounts.map(account => ({
+                label: account?.accountName,
+                value: account?._id
+            }));
+            setAccountList(accountOptions)
+        } catch (error) {
+            setAccountList([])
+            console.log(error, 'error')
+        }
+    }
+    const getBudgetList = async () => {
+        try {
+            const res = await fetchBudgetList()
+            const budgetOptions = res?.data?.budgets.map(budget => ({
+                label: budget?.categoryId?.name,
+                value: budget?._id
+            }));
+            setBudgetList(budgetOptions)
+        } catch (error) {
+            setBudgetList([])
+            console.log(error, 'error')
+        }
+    }
+
+    const getUsersList = async () => {
+        try {
+            const res = await fetchAllUser()
+            const usersOptions = res?.data?.users.map(user => ({
+                label: user?.fullName,
+                value: user?._id
+            }));
+            setUsersList(usersOptions)
+        } catch (error) {
+            setUsersList([])
+            console.log(error, 'error')
+        }
+    }
+
+
+    useEffect(() => {
+        if (user) {
+            getCategoryList()
+            getAccountsList()
+            getBudgetList()
+            getUsersList()
+        }
+    }, [user])
+
+    const defaultValues = {
+        currency: '₹',
+        transactionType: "expense",
+        isRecurring: false,
+    };
 
     const {
         register,
         control,
         handleSubmit,
         formState: { errors },
-        reset
+        reset,
     } = useForm({
         defaultValues,
-        resolver: yupResolver(schema), mode: 'onChange'
+        resolver: yupResolver(schema),
+        mode: 'onChange',
     });
 
-    const userData = storage.getUser()
-
     const onSubmit = async (data) => {
+        const tags = data?.tags?.map(tag => tag?.value);
+        const sharedWith = data?.sharedWith?.map(user => user?.value);
         const reqBody = {
             ...data,
-            userId: userData?.user?._id,
-            foreignDetails: {
-                iban: data?.iban,
-                swiftCode: data?.swiftCode
-            },
-        }
-        try {
-            const res = await createAccount(reqBody)
-            success(res?.message)
-            reset(); // Reset form after submission
-            setIsAddTxn(false); // Close modal
-        } catch (err) {
-            error(err?.message)
-        }
+            tags,
+            sharedWith,
+            userId: user?._id,
+        };
 
+        try {
+            const res = await createTransaction(reqBody);
+            success(res?.message);
+            reset();
+            setIsAddTxn(false);
+        } catch (err) {
+            error(err?.message);
+        }
     };
 
     if (!isAddTxn) return null;
 
     return (
         <motion.div
-            id="add-account-modal"
+            id="add-transaction-modal"
             className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-50"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -85,39 +179,76 @@ const AddTxnModal = () => {
                 <h2 className="text-xl font-semibold mb-4 text-gray-950">Add Transaction</h2>
 
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
-                    {/* Two fields per row using grid layout */}
+                    {/* Transaction Type and Amount */}
                     <div className="grid grid-cols-2 gap-4">
-                        <TextBox register={register} name="amount" errors={errors} placeholder="Enter amount" />
                         <CustomSelect
-                            name='accountType'
+                            name="transactionType"
                             control={control}
-                            options={accountTypeOptions}
-                            error={errors?.accountType}
+                            options={transactionTypeOptions}
+                            error={errors.transactionType}
+                        />
+                        <TextBox register={register} name="amount" errors={errors} placeholder="Enter amount" />
+                    </div>
+
+                    {/* Account and Category */}
+                    <div className="grid grid-cols-2 gap-4">
+                        <CustomSelect
+                            name="accountId"
+                            control={control}
+                            options={accountList}
+                            error={errors.accountId}
+                            placeholder="Select Account"
+                        />
+                        <CustomSelect
+                            name="categoryId"
+                            control={control}
+                            options={categoryList}
+                            error={errors.categoryId}
+                            placeholder="Select Category"
                         />
                     </div>
 
+
+
+                    {/* Tags and Recurring */}
                     <div className="grid grid-cols-2 gap-4">
-                        <TextBox register={register} name="accountName" errors={errors} placeholder="Enter account name" />
-                        <TextBox register={register} name="accountNumber" errors={errors} placeholder="Enter account number" />
+                        <CustomSelect
+                            name="tags"
+                            control={control}
+                            options={tagOptions}
+                            isMulti
+                            error={errors.tags}
+                        />
+                        <div className="flex items-center space-x-2">
+                            <input type="checkbox" {...register("isRecurring")} />
+                            <span className="text-gray-700">Recurring Transaction</span>
+                        </div>
                     </div>
 
+                    {/* Location and Shared With */}
                     <div className="grid grid-cols-2 gap-4">
-                        <TextBox register={register} name="currency" errors={errors} placeholder="Enter currency" />
-                        <TextBox register={register} name="balance" errors={errors} placeholder="Enter balance" />
+                        <TextBox register={register} name="location" errors={errors} placeholder="Enter location (optional)" />
+                        <CustomSelect
+                            name="sharedWith"
+                            control={control}
+                            options={usersList}
+                            isMulti
+                            error={errors.sharedWith}
+                            placeholder="Select Shared With (Optional)"
+                        />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                        <TextBox register={register} name="iban" errors={errors} placeholder="Enter IBAN (optional)" />
-                        <TextBox register={register} name="swiftCode" errors={errors} placeholder="Enter SWIFT Code (optional)" />
-                    </div>
-
-                    <div className="flex items-center space-x-2">
-                        <input type="checkbox" {...register("isDefault")} />
-                        <span>Set as default</span>
-                    </div>
-
+                    {/* Budget (Optional) */}
+                    <CustomSelect
+                        name="budgetId"
+                        control={control}
+                        options={budgetList}
+                        error={errors.budgetId}
+                    />
+                    {/* Description */}
                     <TextBox register={register} name="description" errors={errors} placeholder="Enter description" />
 
+                    {/* Buttons */}
                     <div className="flex justify-end space-x-2">
                         <button
                             type="button"

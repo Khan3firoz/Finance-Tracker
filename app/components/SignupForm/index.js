@@ -67,7 +67,7 @@ const SignupForm = () => {
                 <div className="text-center w-full">
                     <button
                         type="submit"
-                        className="w-1/2 py-2 border-2 text-gray-700 border-gray-700 rounded-lg bg-transparent"
+                        className="w-1/2 py-2 border-2 text-gray-700 border-gray-300 rounded-lg bg-transparent"
                     >
                         SIGN UP
                     </button>

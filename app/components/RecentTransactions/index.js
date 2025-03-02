@@ -1,40 +1,8 @@
+import { useAppContext } from "@/app/Context/AppContext";
+import { fetchAllTransaction } from "@/app/service/account.service";
 import { Coffee, HouseLine, Lightning, ShoppingCart } from "@phosphor-icons/react/dist/ssr";
-import React from "react";
-
-const transactions = [
-    {
-        id: 1,
-        name: "Starbucks Coffee",
-        category: "Food & Drink",
-        amount: "$4.50",
-        date: "Today",
-        icon: "coffee", // Coffee icon
-    },
-    {
-        id: 2,
-        name: "Target",
-        category: "Shopping",
-        amount: "$65.99",
-        date: "Yesterday",
-        icon: "shopping", // Shopping cart icon
-    },
-    {
-        id: 3,
-        name: "Rent Payment",
-        category: "Housing",
-        amount: "$1200.00",
-        date: "1st Mar",
-        icon: "house", // House icon
-    },
-    {
-        id: 4,
-        name: "Electric Bill",
-        category: "Utilities",
-        amount: "$85.50",
-        date: "1st Mar",
-        icon: "electicity", // Lightning bolt icon
-    },
-];
+import dayjs from "dayjs";
+import React, { useEffect, useState } from "react";
 
 const iconMapping = {
     coffee: (
@@ -61,32 +29,53 @@ const iconMapping = {
 
 
 const RecentTransactions = () => {
+    const { user } = useAppContext()
+
+    const [allTransactions, setAllTransactions] = useState([])
+
+    const getAllTransactions = async () => {
+
+        try {
+            const res = await fetchAllTransaction(user?._id)
+            setAllTransactions(res?.data?.transactions)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    useEffect(() => {
+        if (user) {
+            getAllTransactions()
+        }
+    }, [user])
+
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-700">
             {/* Transactions Card */}
             <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-white">Recent Transactions</h2>
             <div className="space-y-4">
-                {transactions.map((transaction) => (
+                {allTransactions.map((transaction) => (
                     <div
-                        key={transaction.id}
+                        key={transaction._id}
                         className="flex justify-between items-center p-4 rounded-lg shadow-sm transition "
                     >
                         <div className="flex items-center space-x-4">
                             <span
                                 className="text-2xl text-gray-700 dark:text-white"
                                 role="img"
-                                aria-label={transaction.category}
+                                aria-label={transaction.categoryId?.name}
                             >
-                                {iconMapping[transaction?.icon]}
+                                {iconMapping[transaction.categoryId?.name?.toLowerCase()]}
+                                {/* {transaction?.categoryId?.icon} */}
                             </span>
                             <div>
-                                <p className="text-sm font-medium text-gray-800 dark:text-white">{transaction.name}</p>
-                                <p className="text-xs text-gray-500 dark:text-gray-400">{transaction.category}</p>
+                                <p className="text-sm font-medium text-gray-800 dark:text-white">{transaction?.categoryId?.name}</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">{transaction?.description}</p>
                             </div>
                         </div>
                         <div className="text-right">
-                            <p className="text-sm font-medium text-red-500 ">{transaction.amount}</p>
-                            <p className="text-xs text-gray-500 dark:text-gray-400">{transaction.date}</p>
+                            <p className={`text-sm font-medium ${transaction?.transactionType === 'debit' ? 'text-red-500' : 'text-green-500'}`}>{transaction.amount}</p>
+                            <p className="text-xs text-gray-500 dark:text-gray-400">{dayjs(transaction?.date)?.format("D MMMM YYYY HH:mm")}</p>
                         </div>
                     </div>
                 ))}

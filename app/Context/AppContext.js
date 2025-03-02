@@ -2,22 +2,15 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { fetchUserDetails } from "../service/user.service";
 import { fetchCategory } from "../service/category.service";
+import storage from "@/utils/storage";
 
 const AppContext = createContext();
 
 export const AppProvider = ({ children }) => {
-    const [user, setUser] = useState(null); // Example state for a user
+    // const [user, setUser] = useState(null); // Example state for a user
     const [isAddCat, setIsAddCat] = useState(false)
     const [isAddTxn, setIsAddTxn] = useState(false)
-
-    const getUser = async () => {
-        try {
-            const res = await fetchUserDetails()
-            setUser(res?.data)
-        } catch (error) {
-            console.log({ error })
-        }
-    }
+    const user = storage.getUser()
 
     const getCategoryList = async () => {
         try {
@@ -27,9 +20,6 @@ export const AppProvider = ({ children }) => {
             console.log(error)
         }
     }
-    useEffect(() => {
-        getUser()
-    }, [])
 
     useEffect(() => {
         if (user) {
@@ -47,7 +37,7 @@ export const AppProvider = ({ children }) => {
 
     return (
         <AppContext.Provider value={{
-            user, setUser, isAddCat, setIsAddCat, handleAddCategory, handleAddTransaction, isAddTxn, setIsAddTxn
+            user, isAddCat, setIsAddCat, handleAddCategory, handleAddTransaction, isAddTxn, setIsAddTxn
         }}>
             {children}
         </AppContext.Provider>

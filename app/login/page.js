@@ -29,7 +29,7 @@ function Login() {
                             <p className='text-base text-white text-center'> Enter your personal details and start your journey with us</p>
                             <button
                                 onClick={handleToggle}
-                                className={`w-1/2 py-2 border-2 ${!signIn ? 'text-gray-700 border-gray-700' : 'text-white  border-white'}  rounded-lg bg-transparent`}
+                                className={`w-1/2 py-2 border-2 ${!signIn ? 'text-gray-300 border-gray-700' : 'text-white  border-white'}  rounded-lg bg-transparent`}
                             >
                                 SIGN UP
                             </button>
@@ -50,7 +50,7 @@ function Login() {
                             <p className='text-base text-white text-center'> To keep connected with us please login with your personal info</p>
                             <button
                                 onClick={handleToggle}
-                                className={`w-1/2 py-2 border-2 ${signIn ? 'text-gray-700 border-gray-700' : 'text-white  border-white'}  rounded-lg bg-transparent`}
+                                className={`w-1/2 py-2 border-2 ${signIn ? 'text-gray-300 border-gray-700' : 'text-white  border-white'}  rounded-lg bg-transparent`}
                             >
                                 LOGIN
                             </button>

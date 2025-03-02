@@ -1,19 +1,16 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Draggable from "react-draggable";
 import { motion } from "framer-motion";
-import { PlusIcon, PencilIcon, TrashIcon, CogIcon } from "@heroicons/react/24/solid";
+import { PlusIcon, PencilIcon } from "@heroicons/react/24/solid";
 import { useExpenceContext } from "@/app/Context/ExpenceContext";
 import { useAppContext } from "@/app/Context/AppContext";
-import { Bank, SignOut, SquaresFour } from "@phosphor-icons/react/dist/ssr";
-import { Wallet } from "@phosphor-icons/react";
-
-
+import { Bank, SquaresFour, Wallet } from "@phosphor-icons/react";
 
 const DraggableFloatingButton = () => {
-    const { handleOpen, handleClosed } = useExpenceContext();
-    const { handleAddCategory, handleAddTransaction } = useAppContext()
+    const { handleOpen } = useExpenceContext();
+    const { handleAddCategory, handleAddTransaction } = useAppContext();
 
     const menuItems = [
         { icon: <Bank className="w-6 h-6 text-blue-500" />, label: "Edit", onClick: handleOpen },
@@ -23,13 +20,33 @@ const DraggableFloatingButton = () => {
     ];
 
     const [isOpen, setIsOpen] = useState(false);
-    const nodeRef = useRef(null);
+    const menuRef = useRef(null);
+    const buttonRef = useRef(null);
     const radius = 80; // Distance of menu items from FAB
 
+    // Close menu when clicking outside
+    useEffect(() => {
+        function handleClickOutside(event) {
+            if (
+                menuRef.current && !menuRef.current.contains(event.target) &&
+                buttonRef.current && !buttonRef.current.contains(event.target)
+            ) {
+                setIsOpen(false);
+            }
+        }
+
+        if (isOpen) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [isOpen]);
+
     return (
-        <Draggable nodeRef={nodeRef}>
-            {/* Positioned in the center-left of the screen */}
-            <div ref={nodeRef} className="fixed top-1/2 left-4 transform -translate-y-1/2 cursor-pointer">
+        <Draggable nodeRef={menuRef}>
+            <div ref={menuRef} className="fixed top-1/2 left-4 transform -translate-y-1/2 cursor-pointer">
                 <div className="relative w-20 h-20 flex items-center justify-center">
                     {/* Circular Menu Items (Clockwise animation) */}
                     {menuItems.map((item, index) => {
@@ -45,7 +62,10 @@ const DraggableFloatingButton = () => {
                                 animate={isOpen ? { opacity: 1, x, y } : { opacity: 0, x: 0, y: 0 }}
                                 transition={{ delay: index * 0.1, type: "spring", stiffness: 200, damping: 15 }}
                                 className="absolute flex items-center justify-center w-12 h-12 bg-white shadow-md rounded-full cursor-pointer hover:bg-gray-100"
-                                onClick={item.onClick} // Added onClick handler
+                                onClick={() => {
+                                    item.onClick();
+                                    setIsOpen(false); // Close menu when an item is clicked
+                                }}
                             >
                                 {item.icon}
                             </motion.div>
@@ -54,6 +74,7 @@ const DraggableFloatingButton = () => {
 
                     {/* Floating Action Button */}
                     <button
+                        ref={buttonRef}
                         onClick={() => setIsOpen(!isOpen)}
                         className="absolute w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition duration-300"
                     >

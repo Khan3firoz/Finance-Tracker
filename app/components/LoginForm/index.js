@@ -13,7 +13,7 @@ import { useRouter } from "next/navigation";
 const schema = Yup.object().shape({
     username: Yup.string().required("Please enter your username"),
     password: Yup.string()
-        .min(6, "Password must be at least 6 characters")
+        .min(5, "Password must be at least 6 characters")
         .required("Password is required"),
 });
 
@@ -34,6 +34,7 @@ function LoginForm() {
             const res = await loginUser(data)
             const token = res?.data?.accessToken
             storage.setToken(token)
+            debugger
             storage.setUser(res?.data?.user)
             routes.push('/')
             success(res?.message)
@@ -72,7 +73,7 @@ function LoginForm() {
             <div className="w-full text-center">
                 <button
                     type="submit"
-                    className="w-1/2 py-2 border-2 text-gray-700 border-gray-700 rounded-lg bg-transparent"
+                    className="w-1/2 py-2 border-2 text-gray-700 border-gray-300 rounded-lg bg-transparent"
                 >
                     LOGIN
                 </button>

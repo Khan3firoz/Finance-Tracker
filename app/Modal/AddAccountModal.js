@@ -11,6 +11,7 @@ import { accountTypeOptions } from "../account/const";
 import { createAccount } from "../service/account.service";
 import { useToast } from "../Context/TosterProvider";
 import storage from "@/utils/storage";
+import { useAppContext } from "../Context/AppContext";
 
 const schema = yup.object().shape({
     amount: yup.number().positive("Amount must be positive").required("Amount is required"),
@@ -28,6 +29,7 @@ const schema = yup.object().shape({
 const AddAccountModal = () => {
     const { isOpen, handleClosed } = useExpenceContext();
     const { success, error } = useToast()
+    const { user } = useAppContext()
     const defaultValues = {
         currency: '₹'
     }
@@ -43,12 +45,12 @@ const AddAccountModal = () => {
         resolver: yupResolver(schema), mode: 'onChange'
     });
 
-    const userData = storage.getUser()
+    // const userData = storage.getUser()
 
     const onSubmit = async (data) => {
         const reqBody = {
             ...data,
-            userId: userData?.user?._id,
+            userId: user?._id,
             foreignDetails: {
                 iban: data?.iban,
                 swiftCode: data?.swiftCode
