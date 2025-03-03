@@ -61,7 +61,7 @@ const AddTxnModal = () => {
 
     const getCategoryList = async () => {
         try {
-            const res = await fetchCategory(user?._id)
+            const res = await fetchCategory()
             const categoryOptions = res?.data?.categories.map(category => ({
                 label: category?.name,
                 value: category?._id
@@ -88,7 +88,7 @@ const AddTxnModal = () => {
         try {
             const res = await fetchBudgetList()
             const budgetOptions = res?.data?.budgets.map(budget => ({
-                label: budget?.categoryId?.name,
+                label: budget?.category?.name,
                 value: budget?._id
             }));
             setBudgetList(budgetOptions)
@@ -244,6 +244,7 @@ const AddTxnModal = () => {
                         control={control}
                         options={budgetList}
                         error={errors.budgetId}
+                        placeholder="select budget (optional)"
                     />
                     {/* Description */}
                     <TextBox register={register} name="description" errors={errors} placeholder="Enter description" />

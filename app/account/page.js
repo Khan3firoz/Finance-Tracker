@@ -15,11 +15,7 @@ const Accounts = () => {
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    console.log(accountList, "accountList")
     const getAccountsList = async () => {
-        // const params = {
-        //     userId: user?.id
-        // }
         try {
             const res = await fetchAccountList(user?._id)
             console.log(res?.data?.accounts, "accounts")
@@ -58,6 +54,10 @@ const Accounts = () => {
         {
             "key": "updatedAt",
             "label": "Updated At"
+        },
+        {
+            "key": "actions",
+            "label": "Actions"
         }
     ]
 

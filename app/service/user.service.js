@@ -13,9 +13,13 @@ export const logoutUser = async () => {
 }
 
 export const fetchUserDetails = async () => {
-    return await axios.get('users/current-user')
+    return await axios.get('/users/current-user')
 }
 
 export const fetchAllUser = async () => {
-    return await axios.get('users/all-user')
+    return await axios.get('/users/all-user')
+}
+
+export const fetchUserSummry = async () => {
+    return await axios.get('/account/transaction/summary')
 }

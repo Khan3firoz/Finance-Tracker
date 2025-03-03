@@ -6,16 +6,17 @@ import { Bank, Bell, Moon, Sun, User } from "@phosphor-icons/react/dist/ssr";
 import * as Avatar from '@radix-ui/react-avatar';
 import storage from '@/utils/storage';
 import { useAppContext } from '@/app/Context/AppContext';
+import { useRouter } from 'next/navigation';
 
 const Header = ({ theme, toggleTheme }) => {
-
+    const router = useRouter();
     const { user } = useAppContext()
 
     return (
         <header className="">
             <nav className="container mx-auto flex items-center justify-between p-4">
                 {/* Left side: Logo and Title */}
-                <div className="flex items-center space-x-2">
+                <div className="flex items-center space-x-2 cursor-pointer" onClick={() => router.push('/')}>
                     <Bank size={50} className="text-gray-800 dark:text-white" weight="light" />
                     <span className="text-xl font-bold dark:text-white text-gray-700">Finance Tracker</span>
                 </div>

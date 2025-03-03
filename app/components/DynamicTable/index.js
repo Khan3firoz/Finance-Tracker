@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { ArrowDown, ArrowUp, DotsThreeVertical } from '@phosphor-icons/react/dist/ssr';
 import Pagination from './components/Pagination';
 
-export default function DynamicTable({ sortable = false, data, columns }) {
+export default function DynamicTable({ sortable = false, data, columns, isPagination = false }) {
     const [tableData, setTableData] = useState(data || []);
     const [menuOpen, setMenuOpen] = useState(false);
     const [sortConfig, setSortConfig] = useState({
@@ -76,7 +76,8 @@ export default function DynamicTable({ sortable = false, data, columns }) {
                     </thead>
                     <tbody>
                         {tableData?.map((row) => (
-                            <tr key={row.id} className=' font-medium dark:border-neutral-500'>
+                            <tr key={row._id} className=' font-medium dark:border-neutral-500'>
+                                {console.log({ row })}
                                 {columns.map((col) => (
                                     <td key={col.key} className="whitespace-nowrap px-6 py-4">
                                         {row[col.key]}
@@ -87,7 +88,7 @@ export default function DynamicTable({ sortable = false, data, columns }) {
                     </tbody>
                 </table>
             </div>
-            <div className='flex justify-end'>
+            {isPagination && <div className='flex justify-end'>
                 <Pagination
                     totalRows={totalRows}
                     rowsPerPage={rowsPerPage}
@@ -98,7 +99,7 @@ export default function DynamicTable({ sortable = false, data, columns }) {
                         setCurrentPage(1);
                     }}
                 />
-            </div>
+            </div>}
 
         </div>
     );

@@ -36,7 +36,7 @@ const RecentTransactions = () => {
     const getAllTransactions = async () => {
 
         try {
-            const res = await fetchAllTransaction(user?._id)
+            const res = await fetchAllTransaction()
             setAllTransactions(res?.data?.transactions)
         } catch (error) {
             console.log(error)

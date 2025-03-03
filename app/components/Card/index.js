@@ -4,12 +4,12 @@ import { ArrowDownRight, ArrowUpRight, Wallet, CurrencyInr } from '@phosphor-ico
 const iconMapping = {
     income: (
         <div className="flex items-center justify-center bg-green-100 p-3 rounded-full">
-            <ArrowUpRight className="h-6 w-6 text-green-500" />
+            <ArrowDownRight className="h-6 w-6 text-green-500" />
         </div>
     ),
     expense: (
         <div className="flex items-center justify-center bg-red-100 p-3 rounded-full">
-            <ArrowDownRight className="h-6 w-6 text-red-500" />
+            <ArrowUpRight className="h-6 w-6 text-red-500" />
         </div>
     ),
     wallet: (
