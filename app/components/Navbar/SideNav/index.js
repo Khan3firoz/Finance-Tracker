@@ -94,18 +94,18 @@ function SideNav() {
                             Expense
                         </Link>
                     </div>
-                    <div className="element dark:text-gray-100 flex items-center">
+                    {/* <div className="element dark:text-gray-100 flex items-center">
                         <ArrowClockwise size={20} className="mr-2" />
                         <Link href="/subscription" onClick={handleNavClick}>
                             Subscription
                         </Link>
-                    </div>
-                    <div className="element dark:text-gray-100 flex items-center">
+                    </div> */}
+                    {/* <div className="element dark:text-gray-100 flex items-center">
                         <Target size={20} className="mr-2" />
                         <Link href="/goals" onClick={handleNavClick}>
                             Goals
                         </Link>
-                    </div>
+                    </div> */}
                     <div className="element dark:text-gray-100 flex items-center ">
                         <SignOut size={20} className="mr-2" />
                         <button onClick={handleLogout}>

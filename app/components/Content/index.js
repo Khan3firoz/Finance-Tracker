@@ -12,6 +12,7 @@ import FloatingActionButton from '../FloatingActionButton'
 import ExpenceModal from '@/app/Modal/AddExpenceModal'
 import { useExpenceContext } from '@/app/Context/ExpenceContext'
 import { fetchUserSummry } from '@/app/service/user.service'
+import CategorySpentChart from '../CategoryHorizontalBar'
 
 const Content = () => {
   // const { isOpen, handleClosed } = useExpenceContext();
@@ -46,7 +47,8 @@ const Content = () => {
           <Card icon='expense' title='Expense' amount={userSummary?.totalExpense} />
           <Card icon='wallet' title='Balance' amount={userSummary?.netAmount} />
         </div>
-        <HorizontalBarChart />
+        {/* <HorizontalBarChart /> */}
+        <CategorySpentChart />
         <ComboChart />
         <RecentTransactions />
         <FloatingActionButton />

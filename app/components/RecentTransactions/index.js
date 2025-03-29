@@ -27,16 +27,13 @@ const iconMapping = {
     ),
 };
 
-
-const RecentTransactions = () => {
+const RecentTransactions = ({ type, title = 'Recent Transactions' }) => {
     const { user } = useAppContext()
-
     const [allTransactions, setAllTransactions] = useState([])
 
     const getAllTransactions = async () => {
-
         try {
-            const res = await fetchAllTransaction()
+            const res = await fetchAllTransaction(type)
             setAllTransactions(res?.data?.transactions)
         } catch (error) {
             console.log(error)
@@ -52,9 +49,9 @@ const RecentTransactions = () => {
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-700">
             {/* Transactions Card */}
-            <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-white">Recent Transactions</h2>
+            <h2 className="text-lg font-semibold mb-4 text-gray-700 dark:text-white">{title}</h2>
             <div className="space-y-4">
-                {allTransactions.map((transaction) => (
+                {allTransactions?.map((transaction) => (
                     <div
                         key={transaction._id}
                         className="flex justify-between items-center p-4 rounded-lg shadow-sm transition "
@@ -66,7 +63,6 @@ const RecentTransactions = () => {
                                 aria-label={transaction.categoryId?.name}
                             >
                                 {iconMapping[transaction.categoryId?.name?.toLowerCase()]}
-                                {/* {transaction?.categoryId?.icon} */}
                             </span>
                             <div>
                                 <p className="text-sm font-medium text-gray-800 dark:text-white">{transaction?.categoryId?.name}</p>
