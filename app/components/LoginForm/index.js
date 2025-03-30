@@ -34,7 +34,6 @@ function LoginForm() {
             const res = await loginUser(data)
             const token = res?.data?.accessToken
             storage.setToken(token)
-            debugger
             storage.setUser(res?.data?.user)
             routes.push('/')
             success(res?.message)

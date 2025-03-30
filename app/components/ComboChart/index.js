@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Chart from 'chart.js/auto';
 import 'chartjs-adapter-date-fns';
+import { fetchIncomeExpense } from '@/app/service/account.service';
+import dayjs from "dayjs";
 
 const generateMockData = () => {
     const data = [];
@@ -24,25 +26,53 @@ const rawDailyData = generateMockData();
 const FinancialChart = () => {
     const chartRef = useRef(null);
     const [view, setView] = useState('daily');
+    const currentDate = dayjs().format("MM-DD-YYYY"); // Get current date in MM-DD-YYYY format
+    const [selectedDate, setSelectedDate] = useState(currentDate);
     const [selectedMonth, setSelectedMonth] = useState(new Date().getMonth());
     const [selectedYear, setSelectedYear] = useState(new Date().getFullYear());
     const chartInstance = useRef(null);
+    const [incomeExpense, setIncomeExpense] = useState([]);
+    const [filteredData, setFilteredData] = useState([]);
 
-    const filteredData = rawDailyData.filter(entry => {
-        const entryDate = new Date(entry.date);
-        if (view === 'daily') {
-            return entryDate.getFullYear() === selectedYear && entryDate.getMonth() === selectedMonth;
-        } else if (view === 'monthly') {
-            return entryDate.getFullYear() === selectedYear;
+    const getIncomeExpense = async () => {
+        const res = await fetchIncomeExpense({ filterType: view, date: selectedDate, month: selectedMonth, year: selectedYear })
+        console.log(res, "res")
+        setIncomeExpense(res?.data)
+    }
+
+    useEffect(() => {
+        getIncomeExpense()
+    }, [selectedDate, selectedMonth, selectedYear, view])
+
+    console.log(view, "view")
+    console.log({ incomeExpense })
+
+    useEffect(() => {
+        if (incomeExpense) {
+            const filteredData = incomeExpense?.filter(entry => {
+                const entryDate = new Date(entry.date);
+                if (view === 'daily') {
+                    return entry.date === selectedDate;
+                } else if (view === 'monthly') {
+                    return entryDate.getFullYear() === selectedYear && entryDate.getMonth() === selectedMonth;
+                } else if (view === 'yearly') {
+                    return entryDate.getFullYear() === selectedYear;
+                }
+                return true;
+            });
+            setFilteredData(filteredData);
         }
-        return true;
-    });
+    }, [incomeExpense, view, selectedDate, selectedMonth, selectedYear]);
+
+
+
+    console.log(filteredData, "filteredData")
 
     const getChartData = () => {
         if (view === 'daily') {
             return {
-                income: filteredData.map(entry => ({ x: entry.date, y: entry.income })),
-                expense: filteredData.map(entry => ({ x: entry.date, y: entry.expense })),
+                income: filteredData?.map(entry => ({ x: entry.date, y: entry.income })),
+                expense: filteredData?.map(entry => ({ x: entry.date, y: entry.expense })),
             };
         } else if (view === 'monthly') {
             const monthlyAggregates = {};
@@ -60,7 +90,7 @@ const FinancialChart = () => {
             };
         } else {
             const yearlyAggregates = {};
-            rawDailyData.forEach(entry => {
+            incomeExpense.forEach(entry => {
                 const yearKey = entry.date.slice(0, 4);
                 if (!yearlyAggregates[yearKey]) {
                     yearlyAggregates[yearKey] = { income: 0, expense: 0, date: `${yearKey}-01-01` };
@@ -80,6 +110,9 @@ const FinancialChart = () => {
         const ctx = chartRef.current.getContext('2d');
         const { income, expense } = getChartData();
 
+        const data = getChartData()
+        console.log(data, "data")
+        console.log(income, expense, "income, expense")
         chartInstance.current = new Chart(ctx, {
             type: 'bar',
             data: {
@@ -114,27 +147,66 @@ const FinancialChart = () => {
         });
     };
 
-
-    useEffect(() => renderChart(), [view, selectedMonth, selectedYear]);
+    useEffect(() => {
+        if (incomeExpense) {
+            renderChart()
+        }
+    }, [view, selectedDate, selectedMonth, selectedYear, filteredData, incomeExpense]);
 
     return (
         <div className="bg-white p-6 rounded-lg shadow-lg dark:bg-gray-700">
             <div className="flex flex-wrap gap-4 mb-4">
+                {/* View Selector */}
                 <select
                     value={view}
                     onChange={e => setView(e.target.value)}
-                    className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-white"
+                    className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white shadow-md"
                 >
                     <option value="daily">Daily</option>
                     <option value="monthly">Monthly</option>
                     <option value="yearly">Yearly</option>
                 </select>
 
-                {view !== 'yearly' && (
+                {/* Date Selection Based on View */}
+                {view === 'daily' && (
+                    <input
+                        type="date"
+                        value={selectedDate}
+                        onChange={e => setSelectedDate(e.target.value)}
+                        className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white shadow-md"
+                    />
+                )}
+
+                {view === 'monthly' && (
+                    <>
+                        <select
+                            value={selectedMonth}
+                            onChange={e => setSelectedMonth(parseInt(e.target.value))}
+                            className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white shadow-md"
+                        >
+                            {[...Array(12)].map((_, i) => (
+                                <option key={i} value={i}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
+                            ))}
+                        </select>
+
+                        <select
+                            value={selectedYear}
+                            onChange={e => setSelectedYear(parseInt(e.target.value))}
+                            className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white shadow-md"
+                        >
+                            {[...Array(6)].map((_, i) => {
+                                const year = new Date().getFullYear() - 5 + i;
+                                return <option key={year} value={year}>{year}</option>;
+                            })}
+                        </select>
+                    </>
+                )}
+
+                {view === 'yearly' && (
                     <select
                         value={selectedYear}
                         onChange={e => setSelectedYear(parseInt(e.target.value))}
-                        className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-white"
+                        className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-700 text-gray-700 dark:text-white shadow-md"
                     >
                         {[...Array(6)].map((_, i) => {
                             const year = new Date().getFullYear() - 5 + i;
@@ -142,23 +214,10 @@ const FinancialChart = () => {
                         })}
                     </select>
                 )}
-
-                {view === 'daily' && (
-                    <select
-                        value={selectedMonth}
-                        onChange={e => setSelectedMonth(parseInt(e.target.value))}
-                        className="p-2 rounded-md dark:border-gray-600 bg-gray-300 dark:bg-gray-800 text-gray-700 dark:text-white"
-                    >
-                        {[...Array(12)].map((_, i) => (
-                            <option key={i} value={i}>{new Date(0, i).toLocaleString('default', { month: 'long' })}</option>
-                        ))}
-                    </select>
-                )}
             </div>
 
             <canvas ref={chartRef} className="w-full"></canvas>
         </div>
-
     );
 };
 
