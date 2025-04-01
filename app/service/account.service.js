@@ -33,7 +33,7 @@ export const fetchIncomeExpense = async ({ filterType, date, month, year }) => {
         queryParams = `filterType=${filterType}&year=${year}`;
     } else if (filterType === 'monthly') {
         queryParams = `filterType=${filterType}&month=${month}&year=${year}`;
-    } else {
+    } else if (filterType === 'daily') {
         // for daily filter
         const formattedDate = formatDate(date);
         queryParams = `filterType=${filterType}&date=${formattedDate}`;
