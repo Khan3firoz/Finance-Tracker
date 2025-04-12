@@ -22,7 +22,8 @@ const DraggableFloatingButton = () => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
-    const radius = 80; // Distance of menu items from FAB
+    const containerRef = useRef(null);
+    const radius = window.innerWidth < 640 ? 60 : 80;
 
     // Close menu when clicking outside
     useEffect(() => {
@@ -37,52 +38,77 @@ const DraggableFloatingButton = () => {
 
         if (isOpen) {
             document.addEventListener("mousedown", handleClickOutside);
+            document.addEventListener("touchstart", handleClickOutside);
         }
 
         return () => {
             document.removeEventListener("mousedown", handleClickOutside);
+            document.removeEventListener("touchstart", handleClickOutside);
         };
     }, [isOpen]);
 
+    const handleItemClick = (onClick) => {
+        onClick();
+        setIsOpen(false);
+    };
+
     return (
-        <Draggable nodeRef={menuRef}>
-            <div ref={menuRef} className="fixed top-1/2 left-4 transform -translate-y-1/2 cursor-pointer">
-                <div className="relative w-20 h-20 flex items-center justify-center">
-                    {/* Circular Menu Items (Clockwise animation) */}
-                    {menuItems.map((item, index) => {
-                        const angle = -90 + index * (180 / (menuItems.length - 1)); // Starts from top (-90°) to bottom (90°)
-                        const radians = (angle * Math.PI) / 180;
-                        const x = Math.cos(radians) * radius;
-                        const y = Math.sin(radians) * radius;
+        <div ref={containerRef} className="fixed inset-0 pointer-events-none">
+            <Draggable
+                nodeRef={menuRef}
+                bounds="parent"
+                defaultPosition={{ x: 0, y: 0 }}
+                onStart={(e) => {
+                    // Prevent menu from opening when dragging
+                    if (e.target === buttonRef.current) {
+                        e.stopPropagation();
+                    }
+                }}
+            >
+                <div
+                    ref={menuRef}
+                    className="fixed bottom-4 right-4 sm:top-1/2 sm:left-4 sm:transform sm:-translate-y-1/2 cursor-pointer z-50 pointer-events-auto"
+                >
+                    <div className="relative w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center">
+                        {/* Circular Menu Items */}
+                        {menuItems.map((item, index) => {
+                            const angle = -90 + index * (180 / (menuItems.length - 1));
+                            const radians = (angle * Math.PI) / 180;
+                            const x = Math.cos(radians) * radius;
+                            const y = Math.sin(radians) * radius;
 
-                        return (
-                            <motion.div
-                                key={index}
-                                initial={{ opacity: 0, x: 0, y: 0 }}
-                                animate={isOpen ? { opacity: 1, x, y } : { opacity: 0, x: 0, y: 0 }}
-                                transition={{ delay: index * 0.1, type: "spring", stiffness: 200, damping: 15 }}
-                                className="absolute flex items-center justify-center w-12 h-12 bg-white shadow-md rounded-full cursor-pointer hover:bg-gray-100"
-                                onClick={() => {
-                                    item.onClick();
-                                    setIsOpen(false); // Close menu when an item is clicked
-                                }}
-                            >
-                                {item.icon}
-                            </motion.div>
-                        );
-                    })}
+                            return (
+                                <motion.div
+                                    key={index}
+                                    initial={{ opacity: 0, x: 0, y: 0 }}
+                                    animate={isOpen ? { opacity: 1, x, y } : { opacity: 0, x: 0, y: 0 }}
+                                    transition={{ delay: index * 0.1, type: "spring", stiffness: 200, damping: 15 }}
+                                    className="absolute flex items-center justify-center w-10 h-10 sm:w-12 sm:h-12 bg-white shadow-md rounded-full cursor-pointer hover:bg-gray-100 active:bg-gray-200"
+                                    onClick={(e) => {
+                                        e.stopPropagation();
+                                        handleItemClick(item.onClick);
+                                    }}
+                                >
+                                    {item.icon}
+                                </motion.div>
+                            );
+                        })}
 
-                    {/* Floating Action Button */}
-                    <button
-                        ref={buttonRef}
-                        onClick={() => setIsOpen(!isOpen)}
-                        className="absolute w-16 h-16 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:bg-blue-700 transition duration-300"
-                    >
-                        <PlusIcon className={`w-8 h-8 transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`} />
-                    </button>
+                        {/* Floating Action Button */}
+                        <button
+                            ref={buttonRef}
+                            onClick={(e) => {
+                                e.stopPropagation();
+                                setIsOpen(!isOpen);
+                            }}
+                            className="absolute w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-blue-600 text-white flex items-center justify-center shadow-lg hover:bg-blue-700 active:bg-blue-800 transition duration-300"
+                        >
+                            <PlusIcon className={`w-6 h-6 sm:w-8 sm:h-8 transition-transform duration-300 ${isOpen ? "rotate-45" : ""}`} />
+                        </button>
+                    </div>
                 </div>
-            </div>
-        </Draggable>
+            </Draggable>
+        </div>
     );
 };
 

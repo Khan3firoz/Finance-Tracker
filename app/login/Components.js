@@ -6,9 +6,10 @@ export const Container = styled.div`
  box-shadow: 0 14px 28px rgba(0, 0, 0, 0.25), 0 10px 10px rgba(0, 0, 0, 0.22);
  position: relative;
  overflow: hidden;
- width: 678px;
- max-width: 100%;
+ width: 100%;
+ max-width: 678px;
  min-height: 400px;
+ margin: 20px;
  `;
 
 export const SignUpContainer = styled.div`
@@ -17,7 +18,7 @@ export const SignUpContainer = styled.div`
   height: 100%;
   transition: all 0.6s ease-in-out;
   left: 0;
-  width: 50%;
+  width: 100%;
   opacity: 0;
   z-index: 1;
   ${props => props.signinIn !== true ? `
@@ -35,7 +36,7 @@ export const SignInContainer = styled.div`
  height: 100%;
  transition: all 0.6s ease-in-out;
  left: 0;
- width: 50%;
+ width: 100%;
  z-index: 2;
  ${props => (props.signinIn !== true ? `transform: translateX(100%);` : null)}
  `;
@@ -46,7 +47,7 @@ export const Form = styled.form`
  align-items: center;
  justify-content: center;
  flex-direction: column;
- padding: 0 50px;
+ padding: 0 20px;
  height: 100%;
  text-align: center;
  `;
@@ -72,10 +73,12 @@ export const Button = styled.button`
     color: #ffffff;
     font-size: 12px;
     font-weight: bold;
-    padding: 12px 45px;
+    padding: 12px 30px;
     letter-spacing: 1px;
     text-transform: uppercase;
     transition: transform 80ms ease-in;
+    width: 100%;
+    max-width: 200px;
     &:active{
         transform: scale(0.95);
     }
@@ -97,8 +100,8 @@ export const Anchor = styled.a`
 export const OverlayContainer = styled.div`
 position: absolute;
 top: 0;
-left: 50%;
-width: 50%;
+left: 0;
+width: 100%;
 height: 100%;
 overflow: hidden;
 transition: transform 0.6s ease-in-out;
@@ -130,11 +133,11 @@ export const OverlayPanel = styled.div`
      align-items: center;
      justify-content: center;
      flex-direction: column;
-     padding: 0 40px;
+     padding: 0 20px;
      text-align: center;
      top: 0;
      height: 100%;
-     width: 50%;
+     width: 100%;
      transform: translateX(0);
      transition: transform 0.6s ease-in-out;
  `;
@@ -155,5 +158,6 @@ export const Paragraph = styled.p`
    font-weight: 100;
    line-height: 20px;
    letter-spacing: 0.5px;
-   margin: 20px 0 30px
+   margin: 20px 0 30px;
+   padding: 0 10px;
  `;

@@ -53,14 +53,14 @@ export default function RootLayout({ children }) {
               <ExpenceProvider>
                 {!isAuthPage && <SideNav />}
                 {!isAuthPage ? (
-                  <div className="ml-2 h-auto p-1 sm:p-2 bg-gray-100 dark:bg-gray-700 rounded-lg shadow min-h-screen">
+                  <div className="ml-0 sm:ml-2 h-auto p-1 sm:p-2 bg-gray-100 dark:bg-gray-700 rounded-lg shadow min-h-screen">
                     <Header theme={theme} toggleTheme={toggleTheme} />
                     <div className="flex w-full">
-                      <main className="p-1 sm:p-2 w-full mx-0 sm:mx-1 lg:mx-4">{children}</main>
+                      <main className="p-1 sm:p-2 w-full mx-0 sm:mx-1 lg:mx-4 overflow-x-auto">{children}</main>
                     </div>
                   </div>
                 ) : (
-                    <main className="min-h-screen">{children}</main>
+                    <main className="min-h-screen w-full">{children}</main>
                 )}
               </ExpenceProvider>
             </FilterProvider>
