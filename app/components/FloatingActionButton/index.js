@@ -22,7 +22,6 @@ const DraggableFloatingButton = () => {
     const [isOpen, setIsOpen] = useState(false);
     const menuRef = useRef(null);
     const buttonRef = useRef(null);
-    const containerRef = useRef(null);
     const radius = window.innerWidth < 640 ? 60 : 80;
 
     // Close menu when clicking outside
@@ -53,13 +52,12 @@ const DraggableFloatingButton = () => {
     };
 
     return (
-        <div ref={containerRef} className="fixed inset-0 pointer-events-none">
+        <div className="fixed inset-0 pointer-events-none z-[9999]">
             <Draggable
                 nodeRef={menuRef}
-                bounds="parent"
-                defaultPosition={{ x: 0, y: 0 }}
+                bounds="body"
+                defaultPosition={{ x: window.innerWidth - 100, y: window.innerHeight - 100 }}
                 onStart={(e) => {
-                    // Prevent menu from opening when dragging
                     if (e.target === buttonRef.current) {
                         e.stopPropagation();
                     }
@@ -67,7 +65,8 @@ const DraggableFloatingButton = () => {
             >
                 <div
                     ref={menuRef}
-                    className="fixed bottom-4 right-4 sm:top-1/2 sm:left-4 sm:transform sm:-translate-y-1/2 cursor-pointer z-50 pointer-events-auto"
+                    className="absolute cursor-pointer pointer-events-auto"
+                    style={{ touchAction: 'none' }}
                 >
                     <div className="relative w-14 h-14 sm:w-20 sm:h-20 flex items-center justify-center">
                         {/* Circular Menu Items */}
